@@ -1,0 +1,22 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mthpvg/home.git"
+  },
+  "author": "mthpvg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mthpvg/home/issues"
+  },
+  "homepage": "https://github.com/mthpvg/home#readme",
+  "dependencies": {
+    "bme280-sensor": "^0.1.6"
+  }
+}
