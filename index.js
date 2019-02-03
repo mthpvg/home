@@ -1,20 +1,26 @@
-const BME280 = require('bme280-sensor')
+const express = require('express')
+const Sensors = require('./sensors')
+const app = express()
+const sensors = new Sensors()
 
-const bme280 = new BME280({i2cBusNo: 1, i2cAddress : 0x77})
+const data = {
+  temperature: []
+}
 
+sensors.init().then(() => {
+  setInterval(() => {
+    sensors.read().then((measures) => {
+      // 10080 = 60 * 24 * 7
+      if (data.temperature.length >= 10080) {
+        data.temperature = []
+      }
+      data.temperature.push(measures.temperature)
+    })
+  }, 60 * 1000)
+})
 
-bme280.init()
-  .then(() => {
-    console.log('BME280 initialization succeeded')
-    setInterval(() => {
-      bme280.readSensorData()
-      .then((data) => {
-        delete data.humidity
-        console.log(JSON.stringify(data, null, 2))
-      })
-      .catch((err) => {
-        console.log(`BME280 read error: ${err}`)
-      })
-    }, 2000)
-  })
-  .catch((err) => console.error(`BME280 initialization failed: ${err} `))
+app.use(express.static('public'))
+
+app.get('/sensors', (req, res) => res.send(data))
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'))

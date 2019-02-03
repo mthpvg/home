@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mthpvg/home#readme",
   "dependencies": {
-    "bme280-sensor": "^0.1.6"
+    "bme280-sensor": "^0.1.6",
+    "express": "^4.16.4"
   }
 }
