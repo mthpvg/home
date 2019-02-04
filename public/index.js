@@ -13,10 +13,14 @@ fetch('/sensors')
         const chart = c3.generate({
           bindto: '#chart',
           data: {
+            x: 'time',
+            xFormat: '%Y-%m-%dT%H:%M:%S',
             columns: [
-              ['temperature'].concat(data.temperature)
+              ['time'].concat(data.dates),
+              ['temperature'].concat(data.temperatures)
             ]
-          }
+          },
+          axis
         })
       })
     }
@@ -24,3 +28,22 @@ fetch('/sensors')
   .catch(function(err) {
     console.log('Fetch Error :-S', err)
   })
+
+const axis = {
+  x: {
+    label: {
+      text: 'Time',
+      position: 'outer-center'
+    },
+    type: 'timeseries',
+    tick: {
+      format: '%H:%M'
+    }
+  },
+  y: {
+    label: {
+      text: 'Temperature',
+      position: 'outer-middle'
+    }
+  }
+}

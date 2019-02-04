@@ -4,19 +4,22 @@ const app = express()
 const sensors = new Sensors()
 
 const data = {
-  temperature: []
+  temperatures: [],
+  dates: []
 }
 
 sensors.init().then(() => {
   setInterval(() => {
     sensors.read().then((measures) => {
       // 10080 = 60 * 24 * 7
-      if (data.temperature.length >= 10080) {
-        data.temperature = []
+      if (data.temperatures.length >= 10080) {
+        data.temperatures = []
       }
-      data.temperature.push(measures.temperature)
+      data.temperatures.push(measures.temperature)
+      const date = new Date()
+      data.dates.push(date.toISOString().split('.')[0])
     })
-  }, 60 * 1000)
+  }, 5 * 60 * 1000)
 })
 
 app.use(express.static('public'))
