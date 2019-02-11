@@ -43,7 +43,6 @@ function getFrom(data) {
     if (day === days[days.length - 1]) return
     days.push(day)
   })
-  console.log({days})
 
 
 
@@ -55,10 +54,10 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T05:45:00`, end: `${day}T08:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
         })
         regions.push({
-          start: `${day}T17:30:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (2):
@@ -66,10 +65,10 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T05:45:00`, end: `${day}T08:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
         })
         regions.push({
-          start: `${day}T17:30:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (4):
@@ -77,10 +76,10 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T05:45:00`, end: `${day}T08:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
         })
         regions.push({
-          start: `${day}T17:30:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (5):
@@ -88,10 +87,10 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T05:45:00`, end: `${day}T08:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
         })
         regions.push({
-          start: `${day}T17:30:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (3):
@@ -99,7 +98,7 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T06:45:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (6):
@@ -107,7 +106,7 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T06:45:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
       case (7):
@@ -115,7 +114,7 @@ function getFrom(data) {
           start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
         })
         regions.push({
-          start: `${day}T06:45:00`, end: `${day}T21:00:00`, class: 'heating'
+          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
         })
         break
     }
