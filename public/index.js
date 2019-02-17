@@ -1,4 +1,4 @@
-fetch('/sensors')
+fetch('/sensors/day')
   .then(
     function(response) {
       if (response.status !== 200) return console.error('cannot fetch /sensors')
@@ -7,9 +7,9 @@ fetch('/sensors')
         console.log(data)
         const chart = c3.generate({
           size: {
-            height: 720,
+            height: 360,
           },
-          bindto: '#chart',
+          bindto: '#chart-day',
           data: format(data),
           axis,
           regions: getFrom(data),
@@ -23,6 +23,32 @@ fetch('/sensors')
   .catch(function(error) {
     console.error('fetching /sensors failed: ', error)
   })
+
+  fetch('/sensors/week')
+    .then(
+      function(response) {
+        if (response.status !== 200) return console.error('cannot fetch /sensors')
+
+        response.json().then(function(data) {
+          console.log(data)
+          const chart = c3.generate({
+            size: {
+              height: 360,
+            },
+            bindto: '#chart-week',
+            data: format(data),
+            axis,
+            regions: getFrom(data),
+            point: {
+              show: false
+            }
+          })
+        })
+      }
+    )
+    .catch(function(error) {
+      console.error('fetching /sensors failed: ', error)
+    })
 
 function format(data) {
   return {
