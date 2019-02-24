@@ -1,54 +1,24 @@
-fetch('/sensors/day')
-  .then(
-    function(response) {
-      if (response.status !== 200) return console.error('cannot fetch /sensors')
+get('day')
+get('week')
+get('month')
 
-      response.json().then(function(data) {
-        console.log(data)
-        const chart = c3.generate({
-          size: {
-            height: 360,
-          },
-          bindto: '#chart-day',
-          data: format(data),
-          axis,
-          regions: getFrom(data),
-          point: {
-            show: false
-          }
-        })
+function get(period) {
+  fetch(`/sensors/${period}`)
+  .then(function(response) {
+    if (response.status !== 200) return console.error('cant fetch /sensors/*')
+    response.json().then(function(data) {
+      const chart = c3.generate({
+        size: {height: 360},
+        bindto: `#chart-${period}`,
+        data: format(data),
+        axis: getAxis(period),
+        regions: getRegions(data),
+        point: {show: true}
       })
-    }
-  )
-  .catch(function(error) {
-    console.error('fetching /sensors failed: ', error)
-  })
-
-  fetch('/sensors/week')
-    .then(
-      function(response) {
-        if (response.status !== 200) return console.error('cannot fetch /sensors')
-
-        response.json().then(function(data) {
-          console.log(data)
-          const chart = c3.generate({
-            size: {
-              height: 360,
-            },
-            bindto: '#chart-week',
-            data: format(data),
-            axis,
-            regions: getFrom(data),
-            point: {
-              show: false
-            }
-          })
-        })
-      }
-    )
-    .catch(function(error) {
-      console.error('fetching /sensors failed: ', error)
     })
+  })
+  .catch(errorHandler)
+}
 
 function format(data) {
   return {
@@ -61,7 +31,26 @@ function format(data) {
   }
 }
 
-function getFrom(data) {
+function getAxis(period) {
+  let format
+  if (period === 'day') format = '%H:%M'
+  if (period === 'week') format = '%d %H:%M'
+  if (period === 'month') format = '%m/%d'
+
+  return {
+    x: {
+      label: {text: 'Time', position: 'outer-center'},
+      type: 'timeseries',
+      tick: {format}
+    },
+    y: {
+      label: {text: 'Temperature', position: 'outer-middle',},
+      // max: 35, min: 20
+    }
+  }
+}
+
+function getRegions(data) {
   const days = []
   data.dates.forEach((date) => {
     const day = date.split('T')[0]
@@ -70,102 +59,62 @@ function getFrom(data) {
     days.push(day)
   })
 
-
-
   const regions = []
   days.forEach((day) => {
     switch(new Date(day).getDay()) {
       case (1):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
-        })
-        regions.push({
-          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newMorningRegion())
+        regions.push(newEveningRegion())
         break
       case (2):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
-        })
-        regions.push({
-          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newMorningRegion())
+        regions.push(newEveningRegion())
         break
       case (4):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
-        })
-        regions.push({
-          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newMorningRegion())
+        regions.push(newEveningRegion())
         break
       case (5):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'
-        })
-        regions.push({
-          start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newMorningRegion())
+        regions.push(newEveningRegion())
         break
       case (3):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newFullDayRegion())
         break
       case (6):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newFullDayRegion())
         break
       case (7):
-        regions.push({
-          start: `${day}T00:00:00`, end: `${day}T01:00:00`, class: 'new'
-        })
-        regions.push({
-          start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'
-        })
+        regions.push(newDayRegion())
+        regions.push(newFullDayRegion())
         break
     }
   })
-  console.log({regions})
   return regions
 }
 
-const axis = {
-  x: {
-    label: {
-      text: 'Time',
-      position: 'outer-center'
-    },
-    type: 'timeseries',
-    tick: {
-      format: '%H'
-    }
-  },
-  y: {
-    label: {
-      text: 'Temperature',
-      position: 'outer-middle',
-    },
-    // max: 35,
-    // min: 20
-  }
+function newDayRegion() {
+  return {start: `${day}T00:00:00`, end: `${day}T00:30:00`, class: 'new'}
+}
+
+function newMorningRegion() {
+  return {start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'}
+}
+
+function newEveningRegion() {
+  return {start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'}
+}
+
+function newFullDayRegion() {
+  return {start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'}
+}
+
+function errorHandler(error) {
+  console.error('fetching /sensors/* failed: ', error)
 }
