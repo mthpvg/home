@@ -63,55 +63,55 @@ function getRegions(data) {
   days.forEach((day) => {
     switch(new Date(day).getDay()) {
       case (1):
-        regions.push(newDayRegion())
-        regions.push(newMorningRegion())
-        regions.push(newEveningRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newMorningRegion(day))
+        regions.push(newEveningRegion(day))
         break
       case (2):
-        regions.push(newDayRegion())
-        regions.push(newMorningRegion())
-        regions.push(newEveningRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newMorningRegion(day))
+        regions.push(newEveningRegion(day))
         break
       case (4):
-        regions.push(newDayRegion())
-        regions.push(newMorningRegion())
-        regions.push(newEveningRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newMorningRegion(day))
+        regions.push(newEveningRegion(day))
         break
       case (5):
-        regions.push(newDayRegion())
-        regions.push(newMorningRegion())
-        regions.push(newEveningRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newMorningRegion(day))
+        regions.push(newEveningRegion(day))
         break
       case (3):
-        regions.push(newDayRegion())
-        regions.push(newFullDayRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newFullDayRegion(day))
         break
       case (6):
-        regions.push(newDayRegion())
-        regions.push(newFullDayRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newFullDayRegion(day))
         break
       case (7):
-        regions.push(newDayRegion())
-        regions.push(newFullDayRegion())
+        regions.push(newDayRegion(day))
+        regions.push(newFullDayRegion(day))
         break
     }
   })
   return regions
 }
 
-function newDayRegion() {
+function newDayRegion(day) {
   return {start: `${day}T00:00:00`, end: `${day}T00:30:00`, class: 'new'}
 }
 
-function newMorningRegion() {
+function newMorningRegion(day) {
   return {start: `${day}T04:30:00`, end: `${day}T07:30:00`, class: 'heating'}
 }
 
-function newEveningRegion() {
+function newEveningRegion(day) {
   return {start: `${day}T15:30:00`, end: `${day}T19:30:00`, class: 'heating'}
 }
 
-function newFullDayRegion() {
+function newFullDayRegion(day) {
   return {start: `${day}T04:30:00`, end: `${day}T19:30:00`, class: 'heating'}
 }
 
