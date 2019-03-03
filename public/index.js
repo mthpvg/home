@@ -1,17 +1,21 @@
-get('day')
-get('week')
-get('month')
+get('week', 'temperatures')
+get('week', 'humidity')
+get('week', 'gasResistance')
 
-function get(period) {
+get('month', 'temperatures')
+get('month', 'humidity')
+get('month', 'gasResistance')
+
+function get(period, measure) {
   fetch(`/sensors/${period}`)
   .then(function(response) {
     if (response.status !== 200) return console.error('cant fetch /sensors/*')
     response.json().then(function(data) {
       const chart = c3.generate({
-        size: {height: 360},
-        bindto: `#chart-${period}`,
-        data: format(data),
-        axis: getAxis(period),
+        size: {height: 270},
+        bindto: `#chart-${period}-${measure}`,
+        data: format(data, measure),
+        axis: getAxis(period, measure),
         regions: getRegions(data),
         point: {show: true}
       })
@@ -20,18 +24,18 @@ function get(period) {
   .catch(errorHandler)
 }
 
-function format(data) {
+function format(data, measure) {
   return {
     x: 'time',
     xFormat: '%Y-%m-%dT%H:%M:%S',
     columns: [
       ['time'].concat(data.dates),
-      ['temperature'].concat(data.temperatures)
+      [measure].concat(data[measure])
     ]
   }
 }
 
-function getAxis(period) {
+function getAxis(period, measure) {
   let format
   if (period === 'day') format = '%H:%M'
   if (period === 'week') format = '%d %H:%M'
@@ -44,8 +48,7 @@ function getAxis(period) {
       tick: {format}
     },
     y: {
-      label: {text: 'Temperature', position: 'outer-middle',},
-      // max: 35, min: 20
+      label: {text: measure, position: 'outer-middle'},
     }
   }
 }

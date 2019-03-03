@@ -17,7 +17,9 @@ module.exports = class Sensors {
     return this.bme680.getSensorData()
       .then((measures) => {
         return {
-          temperature: Number(measures.data.temperature.toPrecision(4))
+          temperature: Number(measures.data.temperature.toPrecision(4)),
+          humidity: Number(measures.data.humidity.toPrecision(4)),
+          gasResistance: Number(measures.data.gas_resistance.toPrecision(6))
           // pressure: Number(measures.pressure_hPa.toPrecision(5))
         }
       })
