@@ -33,7 +33,7 @@ function initData() {
 sensors.forEach((sensor) => {
   const day = sensor.data.day
   const week = sensor.data.week
-  const month = sensor.data.day
+  const month = sensor.data.month
   
   sensor.device.init().then(() => {
     setInterval(() => {
