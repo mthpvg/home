@@ -6,17 +6,20 @@ get('month', 'temperatures')
 get('month', 'humidity')
 get('month', 'gasResistance')
 
+get('day', 'gasResistance')
+
 function get(period, measure) {
   fetch(`/sensors/${period}`)
   .then(function(response) {
     if (response.status !== 200) return console.error('cant fetch /sensors/*')
-    response.json().then(function(data) {
+    response.json().then(function(multiData) {
+      // const data = multiData[0]
       const chart = c3.generate({
         size: {height: 270},
         bindto: `#chart-${period}-${measure}`,
-        data: format(data, measure),
+        data: format(multiData, measure),
         axis: getAxis(period, measure),
-        regions: getRegions(data),
+        regions: getRegions(multiData[0]),
         point: {show: true}
       })
     })
@@ -24,13 +27,14 @@ function get(period, measure) {
   .catch(errorHandler)
 }
 
-function format(data, measure) {
+function format(multiData, measure) {
   return {
     x: 'time',
     xFormat: '%Y-%m-%dT%H:%M:%S',
     columns: [
-      ['time'].concat(data.dates),
-      [measure].concat(data[measure])
+      ['time'].concat(multiData[0].dates),
+      [`${measure}0`].concat(multiData[0][measure]),
+      [`${measure}1`].concat(multiData[1][measure]),
     ]
   }
 }
@@ -48,7 +52,10 @@ function getAxis(period, measure) {
       tick: {format}
     },
     y: {
-      label: {text: measure, position: 'outer-middle'},
+      label: {text: `${measure}0`, position: 'outer-middle'},
+    },
+    y2: {
+      label: {text: `${measure}1`, position: 'outer-middle'},
     }
   }
 }

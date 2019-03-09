@@ -1,10 +1,10 @@
 const {Bme680} = require('bme680-sensor')
 
 
-module.exports = class Sensors {
+module.exports = class Sensor {
 
-  constructor() {
-    this.bme680 = new Bme680(1, 0x76)
+  constructor(address) {
+    this.bme680 = new Bme680(1, address)
   }
 
   init() {
