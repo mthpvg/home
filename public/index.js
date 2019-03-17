@@ -1,6 +1,16 @@
+const MAX1 = 78102
+const MIN1 = 3739
+
+const MAX0 = 226715
+const MIN0 = 20032
+
+
+
 get('week', 'temperatures')
 get('week', 'humidity')
 get('week', 'gasResistance')
+get('week', 'gasResistance', 0)
+get('week', 'gasResistance', 1)
 
 get('month', 'temperatures')
 get('month', 'humidity')
@@ -8,34 +18,64 @@ get('month', 'gasResistance')
 
 get('day', 'gasResistance')
 
-function get(period, measure) {
+function get(period, measure, index) {
   fetch(`/sensors/${period}`)
   .then(function(response) {
     if (response.status !== 200) return console.error('cant fetch /sensors/*')
     response.json().then(function(multiData) {
       // const data = multiData[0]
+      let bindto = `#chart-${period}-${measure}`
+      if (typeof index !== 'undefined') bindto = `#chart-${period}-${measure}-${index}`
       const chart = c3.generate({
-        size: {height: 270},
-        bindto: `#chart-${period}-${measure}`,
-        data: format(multiData, measure),
+        size: {height: 540},
+        bindto,
+        data: format(multiData, measure, period, index),
         axis: getAxis(period, measure),
         regions: getRegions(multiData[0]),
-        point: {show: true}
+        point: {show: false},
+        // zoom: {enabled: true}
       })
     })
   })
   .catch(errorHandler)
 }
 
-function format(multiData, measure) {
+function format(multiData, measure, period, index) {
+
+  if (measure === 'gasResistance' && typeof index === 'undefined') {
+    const max0 = Math.max(...multiData[0][measure])
+    const min0 = Math.min(...multiData[0][measure])
+    const max1 = Math.max(...multiData[1][measure])
+    const min1 = Math.min(...multiData[1][measure])
+
+    console.log({period, max0, min0, max1, min1})
+  }
+
+  let columns = [['time'].concat(multiData[0].dates)]
+
+  if (typeof index !== 'undefined') {
+    columns.push([`${measure}${index}`].concat(multiData[index][measure]))
+  } else {
+    if (measure === 'gasResistance') {
+      const data0 = multiData[0][measure].map((m) => {
+        return (m - MIN0) / (MAX0 - MIN0) * 100
+      })
+      const data1 = multiData[1][measure].map((m) => {
+        return (m - MIN1) / (MAX1 - MIN1) * 100
+      })
+      columns.push([`${measure}0`].concat(data0))
+      columns.push([`${measure}1`].concat(data1))
+    } else {
+      columns.push([`${measure}0`].concat(multiData[0][measure]))
+      columns.push([`${measure}1`].concat(multiData[1][measure]))
+    }
+    
+  }
+
   return {
     x: 'time',
     xFormat: '%Y-%m-%dT%H:%M:%S',
-    columns: [
-      ['time'].concat(multiData[0].dates),
-      [`${measure}0`].concat(multiData[0][measure]),
-      [`${measure}1`].concat(multiData[1][measure]),
-    ]
+    columns
   }
 }
 
@@ -45,7 +85,7 @@ function getAxis(period, measure) {
   if (period === 'week') format = '%d %H:%M'
   if (period === 'month') format = '%m/%d'
 
-  return {
+  let data =  {
     x: {
       label: {text: 'Time', position: 'outer-center'},
       type: 'timeseries',
@@ -58,6 +98,13 @@ function getAxis(period, measure) {
       label: {text: `${measure}1`, position: 'outer-middle'},
     }
   }
+
+  if (measure === 'humidity') {
+    data.y.min = 0
+    data.y.max = 100
+  }
+
+  return data
 }
 
 function getRegions(data) {

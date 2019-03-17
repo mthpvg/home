@@ -53,7 +53,7 @@ sensors.forEach((sensor) => {
       .catch((error) => {
         console.error('reading failed', error)
       })
-    },   1 * 60 * 1000)
+    },   1 * 1 * 1000)
 
     setInterval(() => {
       if (week.temperatures.length >= 4 * 24 * 7) {
@@ -68,7 +68,7 @@ sensors.forEach((sensor) => {
       week.gasResistance.push(average(day.gasResistance, 15))
       const date = new Date()
       week.dates.push(date.toISOString().split('.')[0])
-    },   15 * 60 * 1000)
+    },   15 * 1 * 1000)
 
     setInterval(() => {
       if (month.temperatures.length >= 24 * 28) {
@@ -83,7 +83,7 @@ sensors.forEach((sensor) => {
       month.gasResistance.push(average(day.gasResistance, 60))
       const date = new Date()
       month.dates.push(date.toISOString().split('.')[0])
-    },   60 * 60 * 1000)
+    },   60 * 1 * 1000)
   })
 
 })
