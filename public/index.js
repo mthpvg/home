@@ -1,8 +1,8 @@
-const MAX1 = 78102
-const MIN1 = 3739
+const MAX1 = 26517 //26516
+const MIN1 = 3985 //3739
 
-const MAX0 = 226715
-const MIN0 = 20032
+const MAX0 = 211539 //226715
+const MIN0 = 97647 //20032
 
 
 
@@ -16,6 +16,8 @@ get('month', 'temperatures')
 get('month', 'humidity')
 get('month', 'gasResistance')
 
+get('day', 'temperatures')
+get('day', 'humidity')
 get('day', 'gasResistance')
 
 function get(period, measure, index) {
@@ -56,13 +58,15 @@ function format(multiData, measure, period, index) {
   if (typeof index !== 'undefined') {
     columns.push([`${measure}${index}`].concat(multiData[index][measure]))
   } else {
-    if (measure === 'gasResistance') {
+    if (measure === 'gasResistance' && period !== 'day') {
       const data0 = multiData[0][measure].map((m) => {
-        return (m - MIN0) / (MAX0 - MIN0) * 100
+        return (m - min0) / (max0 - min0) * 100
       })
       const data1 = multiData[1][measure].map((m) => {
-        return (m - MIN1) / (MAX1 - MIN1) * 100
+        return (m - min1) / (max1 - min1) * 100
       })
+      data0.shift()
+      data1.shift()
       columns.push([`${measure}0`].concat(data0))
       columns.push([`${measure}1`].concat(data1))
     } else {
