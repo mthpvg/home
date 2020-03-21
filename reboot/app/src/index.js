@@ -1,9 +1,7 @@
-// const SERVER = 'http://192.168.1.13:3000'
+const SERVER = 'http://192.168.1.17:8080'
 
-// fetch(`${SERVER}/data`)
-//   .then((response) => response.json())
-//   .then((myJson) => {
-//     console.log(myJson)
-//   })
-
-console.log('Hello World')
+fetch(`${SERVER}/data`)
+  .then((response) => response.json())
+  .then((json) => {
+    console.log(json.foo)
+  })
