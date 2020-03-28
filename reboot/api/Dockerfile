@@ -12,6 +12,7 @@ RUN npm install --production
 COPY . .
 
 EXPOSE 8080
+EXPOSE 8081
 
 ENV NODE_ENV production
 

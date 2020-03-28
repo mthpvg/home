@@ -4,6 +4,7 @@ services:
     build: "./api"
     ports:
       - "8080:8080"
+      - "8081:8081"
     restart: always
   app:
     build: "./app"

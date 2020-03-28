@@ -3,6 +3,7 @@ const app = express()
 const PORT = 8080
 const cors = require('./lib/cors')
 
+
 app.use(cors)
 
 app.get('/', (req, res) => {
@@ -14,3 +15,8 @@ app.get('/data', (req, res) => {
 })
 
 app.listen(PORT, () => console.log(`api is listening on port ${PORT}`))
+
+const webSocketServer = require('./websocket-server')(app)
+setInterval(() => webSocketServer.send(), 1000)
+
+

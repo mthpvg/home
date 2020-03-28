@@ -4,8 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "parcel build src/index.html"
   },
   "keywords": [],
   "author": "mthpvg",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }
