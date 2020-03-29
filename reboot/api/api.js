@@ -1,22 +1,10 @@
-const express = require('express')
-const app = express()
-const PORT = 8080
-const cors = require('./lib/cors')
+const webserver = require('./webserver')()
 
+const webSocketServer = require('./websocket-server')(webserver)
 
-app.use(cors)
+const station = require('./station')
 
-app.get('/', (req, res) => {
-  res.send('api')
-})
-
-app.get('/data', (req, res) => {
-  res.send({foo: 'bar'})
-})
-
-app.listen(PORT, () => console.log(`api is listening on port ${PORT}`))
-
-const webSocketServer = require('./websocket-server')(app)
-setInterval(() => webSocketServer.send(), 1000)
-
-
+setInterval(() => {
+  const payload = station()
+  webSocketServer.send(payload)
+}, 1000)

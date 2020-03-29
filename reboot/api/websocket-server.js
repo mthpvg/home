@@ -1,7 +1,12 @@
-module.exports = function (app) {
-  const WebSocket = require('ws')
+const WebSocket = require('ws')
+const PORT = 8081
+
+
+module.exports = function getWebSocketServer(webserver) {
   const WSS = WebSocket.Server
-  const wss = new WSS({server: app, port: 8081})
+  const wss = new WSS({server: webserver, port: PORT})
+
+  console.log(`websocket server listening on port ${PORT}`)
 
   wss.on('connection', onConnection)
   wss.on('error', onError)
@@ -23,16 +28,11 @@ module.exports = function (app) {
     console.log('webSocketServer is closing')
   }
 
-  function send() {
+  function send(payload) {
     if (wss.clients.length === 0) return
+
     wss.clients.forEach((client) => {
       if (client.readyState !== WebSocket.OPEN) return
-      const payload = {
-        temperature: 20,
-        humidity: 40,
-        pressure: 1000,
-        airQuality: 30
-      }
       client.send(JSON.stringify(payload), (error) => {
         if (error) console.log('websocket send error', error)
       })

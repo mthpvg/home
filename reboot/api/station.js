@@ -1,8 +1,8 @@
 module.exports = function (id) {
   return {
-    temperature: 20,
-    humidity: 40,
-    pressure: 1000,
-    airQuality: 30
+    temperature: 20 + Math.round(Math.random() * 2),
+    humidity: 40 + Math.round(Math.random() * 2),
+    pressure: 1000 + Math.round(Math.random() * 50),
+    airQuality: 30  + Math.round(Math.random() * 3)
   }
 }
